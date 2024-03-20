@@ -1,0 +1,27 @@
+version: '2.0'
+services:
+  git-jams-dev:
+    container_name: "git-kadena-academy"
+    image: gitlab/gitlab-ce:15.11.10-ce.0
+    restart: always
+    hostname: ${HOST}
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://${HOST}'
+        gitlab_rails['gitlab_default_projects_features_issues'] = false
+        gitlab_rails['gitlab_default_projects_features_merge_requests'] = false
+        gitlab_rails['gitlab_default_projects_features_wiki'] = false
+        gitlab_rails['gitlab_default_projects_features_snippets'] = false
+        gitlab_rails['gitlab_default_projects_features_builds'] = false
+        gitlab_rails['gitlab_default_projects_features_container_registry'] = false
+        gitlab_rails['webhook_timeout'] = 120
+
+    ports:
+      - "443:443"
+      - "25:22"
+      - "80:80"
+    volumes:
+    - ~/kadena-academy/volumes/gitlab/ssh:/root/.ssh
+    - ~/kadena-academy/volumes/gitlab/config:/etc/gitlab
+    - ~/kadena-academy/volumes/gitlab/logs:/var/log/gitlab
+    - ~/kadena-academy/volumes/gitlab/data:/var/opt/gitlab
